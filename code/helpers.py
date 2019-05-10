@@ -49,12 +49,12 @@ class StateSpaceCreator:
         for n in new_states:
             print(n.getState())
 
-    #creates a list of nodes
+    #creates a list of successor state-nodes for a given state-node
     def getSuccessorStates(self, node):
         
         #in case of S0->S0x, covers the decision's influence on request states
         if(node.getPredecision()):
-        #1.Calculate Route in case there are new requests (=1). Transmit old route from parent for the case that it does not need to be recalculated?
+        #1.Calculate Route in case there are new requests (=1). Include =2. Transmit old route from parent for the case that it does not need to be recalculated?
 
         #2.Distinct the case wait/no wait if route takes max remaining time-1
             return 0
