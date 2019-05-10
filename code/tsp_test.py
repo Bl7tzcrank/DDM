@@ -49,9 +49,13 @@ def subtour(edges):
     return cycle
 
 # Points
-points = coordinates = [(1,1),(4,4),(2,1),(4,1),(1,3)]
+start = [(1,1)]
+end = [(4,4)]
+active = [(2,1)]
+new = [(4,1),(1,3)]
+points = start + end + active + new
 n = len(points)
-t = 10
+t = 6
 
 # Dictionary of Manhattan distance between each pair of points
 
@@ -60,66 +64,61 @@ dist = {(i,j) :
     for i in range(n) for j in range(i)}
 
 print('########')
+print('points')
+print(points)
 print('')
+
+print('########')
 print('dist')
 print(dist)
 print('')
 
 m = gurobipy.Model()
+vars = gurobipy.tupledict()
 
-# Create variables
-
-vars = m.addVars(dist.keys(), obj=dist, vtype=gurobipy.GRB.BINARY, name='e')
+vars[1,0] = m.addVar(obj=6, vtype=gurobipy.GRB.BINARY,
+                        name='e10')
+vars[2,0] = m.addVar(obj=1, vtype=gurobipy.GRB.BINARY,
+                        name='e20')                 
+vars[2,1] = m.addVar(obj=5, vtype=gurobipy.GRB.BINARY,
+                        name='e21')                      
+vars[3,0] = m.addVar(obj=3, vtype=gurobipy.GRB.BINARY,
+                        name='e30')                  
+vars[3,1] = m.addVar(obj=3, vtype=gurobipy.GRB.BINARY,
+                        name='e31')
+vars[3,2] = m.addVar(obj=2, vtype=gurobipy.GRB.BINARY,
+                        name='e32')
+vars[4,0] = m.addVar(obj=2, vtype=gurobipy.GRB.BINARY,
+                        name='e40')
+vars[4,1] = m.addVar(obj=4, vtype=gurobipy.GRB.BINARY,
+                        name='e41')
+vars[4,2] = m.addVar(obj=3, vtype=gurobipy.GRB.BINARY,
+                        name='e42')
+vars[4,3] = m.addVar(obj=5, vtype=gurobipy.GRB.BINARY,
+                        name='e43')
 for i,j in vars.keys():
     vars[j,i] = vars[i,j] # edge in opposite direction
-
-# You could use Python looping constructs and m.addVar() to create
-# these decision variables instead.  The following would be equivalent
-# to the preceding m.addVars() call...
-#
-
-
-"""
-vars = gurobipy.tupledict()
-for i,j in dist.keys():
-    vars[i,j] = m.addVar(obj=dist[i,j], vtype=gurobipy.GRB.BINARY,
-                        name='e[%d,%d]'%(i,j))
-print(vars)
-"""
+#m.update()
 
 print('')
 print("vars")
 print(vars)
 print('')
 
-# Add degree-2 constraint
+#constraint: Define for each, but consider special case for start and end
+m.addConstr((vars[1,0] + vars[2,0] + vars[3,0] + vars[4,0]) == 1) #Node0
+m.addConstr((vars[1,0] + vars[2,1] + vars[3,1] + vars[4,1]) == 1) #Node1
+m.addConstr((vars[2,0] + vars[2,1] + vars[3,2] + vars[4,2]) == 2) #Node2
+m.addConstr((vars[3,0] + vars[3,1] + vars[3,2] + vars[4,3]) == 2) #Node3
+m.addConstr((vars[4,0] + vars[4,1] + vars[4,2] + vars[4,3]) == 2) #Node4
 
-m.addConstrs(vars.sum(i,'*') == 2 for i in range(n))
-
-# Using Python looping constructs, the preceding would be...
-#
-#for i in range(n):
-#    m.addConstr(sum(vars[i,j] for j in range(n)) == 2)
-
-
-# Optimize model
+#m.addConstrs(vars.sum(i,'*') == 2 for i in range(n))
 
 m._vars = vars
 m.Params.lazyConstraints = 1
 m.optimize(subtourelim)
-
 vals = m.getAttr('x', vars)
+
 print('')
 print("vals")
 print(vals)
-"""selected = gurobipy.tuplelist((i,j) for i,j in vals.keys() if vals[i,j] > 0.5)
-
-tour = subtour(selected)
-assert len(tour) == n
-
-print('')
-print('Optimal tour: %s' % str(tour))
-print('Optimal cost: %g' % m.objVal)
-print('')"""
-
-#TODO: Händisch, einfach das Problem angehen    
