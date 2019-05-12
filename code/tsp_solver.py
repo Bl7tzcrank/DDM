@@ -24,7 +24,11 @@ def subtourelim(model, where):
         selected = gurobipy.tuplelist((i,j) for i,j in model._vars.keys() if vals[i,j] > 0.5)
         # find the shortest cycle in the selected edge list
         tour = subtour(selected)
+        print(selected)
         if len(tour) < n:
+            print('')
+            print('Added constraint')
+            print(tour)
             # add subtour elimination constraint for every pair of cities in tour
             model.cbLazy(gurobipy.quicksum(model._vars[i,j]
                                   for i,j in itertools.combinations(tour, 2))
@@ -36,6 +40,9 @@ def subtourelim(model, where):
 def subtour(edges):
     unvisited = list(range(n))
     cycle = range(n+1) # initial length has 1 more city
+    print('subtour')
+    print(unvisited)
+    print(cycle)
     while unvisited: # true if list is non-empty
         thiscycle = []
         neighbors = unvisited
@@ -44,12 +51,13 @@ def subtour(edges):
             thiscycle.append(current)
             unvisited.remove(current)
             neighbors = [j for i,j in edges.select(current,'*') if j in unvisited]
+            print(neighbors)
         if len(cycle) > len(thiscycle):
             cycle = thiscycle
     return cycle
 
 # Points
-points = coordinates = [(1,1),(4,4),(2,1),(4,1),(1,3)]
+points = coordinates = [(1,1),(2,1),(1,2),(4,4),(4,3),(3,4),(2,2)]
 n = len(points)
 t = 10
 

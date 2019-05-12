@@ -22,40 +22,51 @@ def subtourelim(model, where):
         # make a list of edges selected in the solution
         vals = model.cbGetSolution(model._vars)
         selected = gurobipy.tuplelist((i,j) for i,j in model._vars.keys() if vals[i,j] > 0.5)
-        # find the shortest cycle in the selected edge list
+        # find the shortest cycle in the selected edge list which is not the route from 0 to 1
         tour = subtour(selected)
-        if len(tour) < n:
+        print(selected)
+        if len(tour) >= 3: #only important if there is a cycle with 3 or more members involved (no duplicate, because subtour may return empty list)
+            print('')
+            print('Added constraint')
+            print(tour)
+            print('')
             # add subtour elimination constraint for every pair of cities in tour
             model.cbLazy(gurobipy.quicksum(model._vars[i,j]
                                   for i,j in itertools.combinations(tour, 2))
                          <= len(tour)-1)
 
-
-# Given a tuplelist of edges, find the shortest subtour
-
+# Given a tuplelist of edges, find the shortest subtour which is not the route from 0 to 1
 def subtour(edges):
     unvisited = list(range(n))
-    cycle = range(n+1) # initial length has 1 more city
+    cycle = []
     while unvisited: # true if list is non-empty
         thiscycle = []
         neighbors = unvisited
-        while neighbors:
+        while neighbors: # true if list is non-empty. Finds subtours in the remaining set of unvisited nodes.
             current = neighbors[0]
             thiscycle.append(current)
             unvisited.remove(current)
-            neighbors = [j for i,j in edges.select(current,'*') if j in unvisited]
-        if len(cycle) > len(thiscycle):
-            cycle = thiscycle
+            neighbors = [j for i,j in edges.select(current,'*') if j in unvisited] 
+        print('')
+        print('Found Cycle')
+        print(thiscycle)
+        if not((0 in thiscycle) or (1 in thiscycle)) and len(thiscycle) >= 3: #if it not found the route from start to end and the tour has 3 or more members
+            if ((len(cycle) > len(thiscycle)) or (len(cycle) == 0)):  #if the cycle found is the first one or smaller then previous ones  
+                cycle = thiscycle
     return cycle
+
+"""points = gurobipy.tuplelist([(1,0),(3,2),(4,2),(4,3),(0,1),(2,3),(2,4),(3,4)])
+n = len(points)
+print(subtour(points))"""
 
 # Points
 start = [(1,1)]
-end = [(4,4)]
-active = [(2,1)]
-new = [(4,1),(1,3)]
+end = [(2,1)]
+active = [(4,1)]
+new = [(4,4),(3,4)]
 points = start + end + active + new
 n = len(points)
-t = 6
+t = 9
 
 # Dictionary of Manhattan distance between each pair of points
 
@@ -135,7 +146,7 @@ m.setObjective((vars[1,0] + vars[2,0] +
 m._vars = vars
 m.Params.lazyConstraints = 1
 #m.optimize(subtourelim)
-m.optimize()
+m.optimize(subtourelim)
 vals = m.getAttr('x', vars)
 
 print('')
