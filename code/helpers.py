@@ -1,4 +1,5 @@
 import itertools
+from tsp_solver import * 
 
 #Classes
 class Node:
@@ -30,36 +31,58 @@ class Node:
         return self.predecision
 
 class StateSpaceCreator:
-    def __init__(self, init, coordinates):
+    def __init__(self, init, start, end, customer_coordinates):
         self.init = init
-        self.coordinates = coordinates
-        self.distances = getManhattan(coordinates)
+        self.start = start
+        self.end = end
+        self.customer_coordinates = customer_coordinates  
+        self.distances = getManhattan(start+end+customer_coordinates)
+        self.route = []
 
     def getInit(self):
         return self.init
 
-    def getCoordinates(self):
-        return self.coordinates
+    def getCustomerCoordinates(self):
+        return self.customer_coordinates
 
     def getDistances(self):
         return self.distances
 
     def createStateSpace(self):
-        new_states=(self.getSuccessorStates(self.init))
+        """new_states=(self.getSuccessorStates(self.init))
         for n in new_states:
-            print(n.getState())
+            print(n.getState())"""
+        self.getSuccessorStates(self.init)
+
+    #returns list of coordinates of customers with request state 2
+    def getOldCustomer(self,requests):
+        cors = []
+        for i in range(len(self.customer_coordinates)):
+            if requests[i] == 2:
+                cors.append(self.customer_coordinates[i])
+        return cors
+
+    #returns list of coordinates of customers with request state 1
+    def getNewCustomers(self,requests):
+        cors = []
+        for i in range(len(self.customer_coordinates)):
+            if requests[i] == 1:
+                cors.append(self.customer_coordinates[i])
+        return cors
 
     #creates a list of successor state-nodes for a given state-node
     def getSuccessorStates(self, node):
         
-        #in case of S0->S0x, covers the decision's influence on request states
+        ##in case of S0->S0x, covers the decision's influence on request states
         if(node.getPredecision()):
-        #1.Calculate Route in case there are new requests (=1). Include =2. Transmit old route from parent for the case that it does not need to be recalculated?
-
+        #1.Calculate Route 
+            if(not self.route): #in case there has never been a route calculated, in case there are new requests (=1). Include =2. Transmit old route from parent for the case that it does not need to be recalculated?
+                tsp = tsp_solver(self.start,self.end,self.getOldCustomer(node.getRequests()),self.getNewCustomers(node.getRequests()),node.getDelta())
+                self.tour = tsp.solveTSP()
         #2.Distinct the case wait/no wait if route takes max remaining time-1
-            return 0
+            
 
-        #in case of S0x->S1, covers to exegeneous influence on request states
+        ##in case of S0x->S1, covers to exegeneous influence on request states
         if not(node.getPredecision()):
             w = [0,1]
             #1.Regarding customer requests
@@ -98,9 +121,11 @@ def getManhattan(coordinates):
     return(distances)
 
 ##experiments
-coordinates = [(1,1),(2,2),(3,3)]
-Node1 = Node("Hamburg", [0,0], 3, False)
-stateSpaceCreator = StateSpaceCreator(Node1, coordinates)
+start = [(1,1)]
+end = [(2,1)]
+customer_coordinates = [(4,1),(4,4)]
+Node1 = Node("Hamburg", [1,1], 11, True)
+stateSpaceCreator = StateSpaceCreator(Node1, start, end, customer_coordinates)
 #print(Node1.getRequests())
 stateSpaceCreator.createStateSpace()
 #print(stateSpaceCreator.getDistances())

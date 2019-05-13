@@ -13,8 +13,6 @@ import random
 import itertools
 import gurobipy as gurobipy 
 
-# Callback - use lazy constraints to eliminate sub-tours
-
 class tsp_solver:
     def __init__(self, start, end, active, new, t):
         self.start = start
@@ -24,6 +22,7 @@ class tsp_solver:
         self.n = len(start+end+active+new)
         self.t = t
 
+    #Solves the tsp by creating a model and optimizing it
     def solveTSP(self):
         points = self.start + self.end + self.active + self.new
         dist = {(i,j) :
@@ -92,6 +91,9 @@ class tsp_solver:
         print("vals")
         print(vals)
 
+        return(getTour(vals))    
+
+# Callback - use lazy constraints to eliminate sub-tours
 def subtourelim(model, where):
         if where == gurobipy.GRB.Callback.MIPSOL:
             # make a list of edges selected in the solution
@@ -130,6 +132,24 @@ def subtour(edges):
                 cycle = thiscycle
     return cycle
 
+def getTour(tupledict):
+    visited = []
+    current = 0
+    nodes = []
+    while current != 1:
+        visited.append(current)
+        #filter for edges outgoing from current
+        for t in tupledict:
+                if t[0] == current and tupledict.select(t[0],t[1])[0] == 1.0:
+                    nodes.append(t) #possible successor with ==1
+        #check which ones of the filtered ones were already visited
+        for n in nodes:
+            if n[1] not in visited:
+                current = n[1]
+    visited.append(1)
+    return(visited)  
+
+#Returns list of unique values in a tupledict
 def elements(tuplelist):
     k = []
     for i,j in tuplelist:
@@ -143,6 +163,14 @@ start = [(1,1)]
 end = [(2,1)]
 active = [(4,1)]
 new = [(4,4),(3,4)]
+t = 11
+tsp = tsp_solver(start,end,active,new,t)
+print(tsp.solveTSP())
+
+"""start = [(1,1)]
+end = [(2,1)]
+active = []
+new = []
 t = 9
 tsp = tsp_solver(start,end,active,new,t)
-tsp.solveTSP()
+tsp.solveTSP()"""
