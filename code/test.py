@@ -1,2 +1,3 @@
-l = [1,2,3,3]
-print(len(l) == len(set(l)))
+n = 4
+for i in range(2,n):
+    print(i)

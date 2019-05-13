@@ -145,7 +145,6 @@ m.setObjective((vars[1,0] + vars[2,0] +
 
 m._vars = vars
 m.Params.lazyConstraints = 1
-#m.optimize(subtourelim)
 m.optimize(subtourelim)
 vals = m.getAttr('x', vars)
 
