@@ -159,13 +159,13 @@ def elements(tuplelist):
             k.append(j)
     return k
 
-start = [(1,1)]
+"""start = [(1,1)]
 end = [(2,1)]
 active = [(4,1)]
 new = [(4,4),(3,4)]
 t = 11
 tsp = tsp_solver(start,end,active,new,t)
-print(tsp.solveTSP())
+print(tsp.solveTSP())"""
 
 """start = [(1,1)]
 end = [(2,1)]
