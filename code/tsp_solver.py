@@ -29,14 +29,14 @@ class tsp_solver:
             (sum(abs(points[i][k]-points[j][k]) for k in range(2)))
             for i in range(self.n) for j in range(i)}
 
-        print('')
+        """print('')
         print('points')
         print(points)
         print('')
         print('')
         print('dist')
         print(dist)
-        print('')
+        print('')"""
 
         m = gurobipy.Model()
 
@@ -45,10 +45,10 @@ class tsp_solver:
         for i,j in vars.keys():
             vars[j,i] = vars[i,j]
 
-        print('')
+        """print('')
         print('vars')
         print(vars)
-        print('')
+        print('')"""
 
         #For 0 and 1
         m.addConstr(vars.sum('*',0) == 1)
@@ -87,9 +87,9 @@ class tsp_solver:
         m.optimize(subtourelim)
         vals = m.getAttr('x', vars)
 
-        print('')
+        """print('')
         print("vals")
-        print(vals)
+        print(vals)"""
 
         return(getTour(vals))    
 
@@ -101,12 +101,12 @@ def subtourelim(model, where):
             selected = gurobipy.tuplelist((i,j) for i,j in model._vars.keys() if vals[i,j] > 0.5)
             # find the shortest cycle in the selected edge list which is not the route from 0 to 1
             tour = subtour(selected)
-            print(selected)
+            """print(selected)"""
             if len(tour) >= 3: #only important if there is a cycle with 3 or more members involved (no duplicate, because subtour may return empty list)
-                print('')
+                """print('')
                 print('Added constraint')
                 print(tour)
-                print('')
+                print('')"""
                 # add subtour elimination constraint for every pair of cities in tour
                 model.cbLazy(gurobipy.quicksum(model._vars[i,j]
                                     for i,j in itertools.combinations(tour, 2))
@@ -124,9 +124,9 @@ def subtour(edges):
             thiscycle.append(current)
             unvisited.remove(current)
             neighbors = [j for i,j in edges.select(current,'*') if j in unvisited] 
-        print('')
+        """print('')
         print('Found Cycle')
-        print(thiscycle)
+        print(thiscycle)"""
         if not((0 in thiscycle) or (1 in thiscycle)) and len(thiscycle) >= 3: #if it not found the route from start to end and the tour has 3 or more members
             if ((len(cycle) > len(thiscycle)) or (len(cycle) == 0)):  #if the cycle found is the first one or smaller then previous ones  
                 cycle = thiscycle
