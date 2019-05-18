@@ -39,6 +39,7 @@ class tsp_solver:
         print('')"""
 
         m = gurobipy.Model()
+        m.setParam( 'OutputFlag', False )
 
         vars = gurobipy.tupledict()
         vars = m.addVars(dist.keys(), vtype=gurobipy.GRB.BINARY, name='e')
@@ -85,13 +86,17 @@ class tsp_solver:
         m._vars = vars
         m.Params.lazyConstraints = 1
         m.optimize(subtourelim)
-        vals = m.getAttr('x', vars)
 
-        """print('')
-        print("vals")
-        print(vals)"""
+        try:
+            vals = m.getAttr('x', vars)
 
-        return(getTour(vals))    
+            """print('')
+            print("vals")
+            print(vals)"""
+
+            return(getTour(vals))
+        except:
+            return False    
 
 # Callback - use lazy constraints to eliminate sub-tours
 def subtourelim(model, where):
