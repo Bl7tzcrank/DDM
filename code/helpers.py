@@ -12,6 +12,7 @@ class Node:
         }
         self.time_left = time_left
         self.predecision = predecision #True: St -> Stx, False: Stx -> St+1
+        self.expected_value = None
         self.id = id if id is not None else 'root'
     
     def getState(self):
@@ -31,6 +32,12 @@ class Node:
     
     def getPredecision(self):
         return self.predecision
+
+    def getExpectedValue(self):
+        return self.expected_value
+    
+    def setExpectedValue(self, e):
+        self.expected_value = e
     
     def getID(self):
         return self.id
@@ -129,8 +136,32 @@ class StateSpaceCreator:
             if len(childs) > 0:
                 active = childs[0]    
         self.printStateSpace(state_space.getGraph())
+        print(state_space.getGraph())
+        self.valueIteration("root",state_space.getGraph())
         createGraphWithStates(state_space.getGraph())
-
+    
+    def valueIteration(self, active, state_space):
+        node = state_space[active]["obj"]
+        successor = state_space[active]["successors"]
+        if len(successor) == 0:
+            node.setExpectedValue(0)
+            return 0
+        elif node.getPredecision():
+            max = None
+            for s in successor:
+                e = self.valueIteration(s[0], state_space) + s[1]
+                if max is None or e > max:
+                    max = e
+            node.setExpectedValue(max)
+            return max
+        elif not node.getPredecision():
+            sum = 0
+            for s in successor:
+                e = self.valueIteration(s[0], state_space) * s[1]
+                sum = sum + e
+            node.setExpectedValue(sum)
+            return sum      
+    
     #creates a list of successor state-nodes for a given state-node including edge weight (profit or likelihood)
     def getSuccessorStates(self, node):  
         new_states = []
@@ -234,7 +265,6 @@ class StateSpaceCreator:
             for r in requestlist:
                 new_states.append((Node(node.getDestination(), r, new_delta, node.getTimeLeft()-1, not(node.getPredecision()), self.getID(node.getTimeLeft())), self.getCustomerBehavior(node.getTimeLeft()-1,r)))
             return new_states
-        
 
 #Helpers
 def getManhattan(coordinates):
@@ -252,16 +282,31 @@ def getTourDistance(tour, distances):
         dist = dist + distances[tour[t]][tour[t+1]]
     return(dist)
 
-##experiments
+##experiment1
 start = [(1,1)] #dest 0
 end = [(2,1)] #dest 1
 customer_coordinates = [(3,1),(4,1)] #dest2,...
 def getCustomerBehavior(time_left, customers):
-    return 0.4
-
+    likelihood = 0.4
+    total = 0
+    for c in customers:
+        if total == 0 and c < 2:
+            total = c * likelihood + abs(c-1) * (1-likelihood)
+        elif c < 2: 
+            k = (c * likelihood + abs(c-1) * (1-likelihood))
+            total = total * k
+    return total
+    
 Node1 = Node(0, [0,0], 0, 6, True)
 stateSpaceCreator = StateSpaceCreator(Node1, start, end, customer_coordinates, getCustomerBehavior)
-#print(Node1.getRequests())
 stateSpaceCreator.createStateSpace()
-#print(stateSpaceCreator.getDistances())
-#print(getTourDistance([0,2,1],getManhattan([(1,1),(2,1),(4,1),(4,4)])))
+
+##experiment2
+"""start = [(1,1)] #dest 0
+end = [(3,1)] #dest 1
+customer_coordinates = [(2,1)] #dest2,...
+def getCustomerBehavior(time_left, customers):
+    return 0.4
+Node1 = Node(0, [0], 0, 3, True)
+stateSpaceCreator = StateSpaceCreator(Node1, start, end, customer_coordinates, getCustomerBehavior)
+stateSpaceCreator.createStateSpace()"""

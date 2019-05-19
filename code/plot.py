@@ -13,10 +13,10 @@ def createGraph(dict):
 def createGraphWithStates(dict):
     g = nx.DiGraph()
     for k in dict.keys():
-        g.add_node(k, label = str(dict[k]["obj"].getDestination()) + str(dict[k]["obj"].getRequests()) + str(dict[k]["obj"].getDelta()))
+        g.add_node(k, label = str(dict[k]["obj"].getDestination()) + str(dict[k]["obj"].getRequests()) + str(dict[k]["obj"].getDelta()) + ' E:' + str(round(dict[k]["obj"].getExpectedValue(),2)))
     for k in dict.keys():
         for s in dict[k]["successors"]:
-            g.add_edges_from([(k, s[0])], label = str(' ') + str(s[1]))
+            g.add_edges_from([(k, s[0])], label = str(' ') + str(round(s[1],2)))
     p=nx.drawing.nx_pydot.to_pydot(g)
     p.write_png('example.png')
 
