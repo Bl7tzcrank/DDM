@@ -79,8 +79,10 @@ class tsp_solver:
                 init2 = False
             else:
                 expr2 = expr2 + gurobipy.LinExpr(vars[i,j])
-        m.setObjective(expr2, sense=gurobipy.GRB.MAXIMIZE)
+        expr3 = expr2 - ((1/(self.t+1)) * expr1)
+        m.setObjective(expr3, sense=gurobipy.GRB.MAXIMIZE)
 
+        #m.setObjective(expr2, sense=gurobipy.GRB.MAXIMIZE)
         #m.setObjective(vars.sum(), sense=gurobipy.GRB.MAXIMIZE)
 
         m._vars = vars
