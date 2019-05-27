@@ -286,14 +286,15 @@ def getTourDistance(tour, distances):
 start = [(1,1)] #dest 0
 end = [(2,1)] #dest 1
 customer_coordinates = [(3,1),(4,1)] #dest2,...
+
 def getCustomerBehavior(time_left, customers):
-    likelihood = 0.4
+    customer_likelihood = [0.4,0.3]
     total = 0
-    for c in customers:
-        if total == 0 and c < 2:
-            total = c * likelihood + abs(c-1) * (1-likelihood)
-        elif c < 2: 
-            k = (c * likelihood + abs(c-1) * (1-likelihood))
+    for c in range(len(customers)):
+        if total == 0 and customers[c] < 2:
+            total = customers[c] * customer_likelihood[c] + abs(customers[c]-1) * (1-customer_likelihood[c])
+        elif customers[c] < 2: 
+            k = (customers[c] * customer_likelihood[c] + abs(customers[c]-1) * (1-customer_likelihood[c]))
             total = total * k
     return total
     
