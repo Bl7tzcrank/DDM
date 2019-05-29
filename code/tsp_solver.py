@@ -79,6 +79,7 @@ class tsp_solver:
                 init2 = False
             else:
                 expr2 = expr2 + gurobipy.LinExpr(vars[i,j])
+        
         expr3 = expr2 + ((1/(self.t+1)) * expr1)
         m.setObjective(expr3, sense=gurobipy.GRB.MAXIMIZE)
 
@@ -89,16 +90,12 @@ class tsp_solver:
         m.Params.lazyConstraints = 1
         m.optimize(subtourelim)
 
-        try:
-            vals = m.getAttr('x', vars)
+        vals = m.getAttr('x', vars)
 
-            """print('')
-            print("vals")
-            print(vals)"""
-
-            return(getTour(vals))
-        except:
-            return False    
+        """print('')
+        print("vals")
+        print(vals)"""
+        return(getTour(vals))
 
 # Callback - use lazy constraints to eliminate sub-tours
 def subtourelim(model, where):
@@ -146,8 +143,8 @@ def getTour(tupledict):
     while current != 1:
         visited.append(current)
         #filter for edges outgoing from current
-        for t in tupledict:
-                if t[0] == current and tupledict.select(t[0],t[1])[0] == 1.0:
+        for t in tupledict: 
+                if t[0] == current and int(round(tupledict.select(t[0],t[1])[0])) == 1: #rounding needed because of python being not precious with float
                     nodes.append(t) #possible successor with ==1
         #check which ones of the filtered ones were already visited
         for n in nodes:
@@ -168,9 +165,17 @@ def elements(tuplelist):
 
 """start = [(1,1)]
 end = [(2,1)]
-active = [(4,1)]
-new = [(4,4),(3,4)]
-t = 11
+active = [(3,3)]
+new = [(3,1),(3,2)]
+t = 8
+tsp = tsp_solver(start,end,active,new,t)
+print(tsp.solveTSP())"""
+
+"""start = [(1,1)]
+end = [(2,1)]
+active = []
+new = [(4,1),(3,3),(3,2)]
+t = 9
 tsp = tsp_solver(start,end,active,new,t)
 print(tsp.solveTSP())"""
 

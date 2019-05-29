@@ -1,8 +1,9 @@
 import itertools
 from tsp_solver import * 
 from plot import *
+import os
 
-#Classes
+##Classes
 class Node:
     def __init__(self, destination, requests, delta, time_left, predecision, id=None):
         self.state = {
@@ -49,12 +50,13 @@ class Graph:
     def getGraph(self):
         return self.graphdict
     
+    #adds a node to the graph and forms predeccessors and successors
     def addNode(self, node, predecessor, successors):
         successor_ids = []
         for c in successors:
             successor_ids.append((c[0].getID(),c[1]))
         self.graphdict[node.getID()].update({
-            "successors": successor_ids # der ist schon da und es muss nur successor angepasst werden
+            "successors": successor_ids
         })
         for s in successors:
             self.graphdict[s[0].getID()] = {
@@ -62,6 +64,7 @@ class Graph:
                 "predecessor": (node.getID(), s[1]),
                 "successors": []
             }   
+        return node.getID()
 
 class StateSpaceCreator:
     def __init__(self, init, start, end, customer_coordinates, getCustomerBehavior, tour=None):
@@ -104,6 +107,7 @@ class StateSpaceCreator:
                 cors.append(self.customer_coordinates[i])
         return cors
 
+    #prints the state space
     def printStateSpace(self, dict):
         for k in dict.keys():
             print("-----")
@@ -115,7 +119,8 @@ class StateSpaceCreator:
             print("Successors:" , end =" ")
             print(dict[k]["successors"])
 
-    def createStateSpace(self):
+    #creates the state space and value iterates
+    def createPolicy(self):
 
         state_space = Graph()
         childs = [self.init]
@@ -129,17 +134,18 @@ class StateSpaceCreator:
             new_states=(self.getSuccessorStates(active)) 
             for n in new_states:
                 childs.append(n[0])
-                print('####')
-                print(n[0].getState())
-            state_space.addNode(active, [], new_states)
+                #print('####')
+                #print(n[0].getState())
+            #os.system("clear")
+            current_progress = (state_space.addNode(active, [], new_states))
+            #print(current_progress, flush = True)
             del childs[0]
             if len(childs) > 0:
-                active = childs[0]    
-        self.printStateSpace(state_space.getGraph())
-        print(state_space.getGraph())
+                active = childs[0]     
         self.valueIteration("root",state_space.getGraph())
-        createGraphWithStates(state_space.getGraph())
+        return state_space.getGraph()
     
+    #recursively iterates through the graph and calculates expected values
     def valueIteration(self, active, state_space):
         node = state_space[active]["obj"]
         successor = state_space[active]["successors"]
@@ -190,13 +196,13 @@ class StateSpaceCreator:
                     tsp = tsp_solver([self.all_coordinates[node.getDestination()]],self.end,self.getOldCustomer(node.getRequests()),self.getNewCustomers(node.getRequests()),node.getTimeLeft()-node.getDelta())
                     try_tour = tsp.solveTSP()
                     #convert tsp_solver output. Ids in self.tour are then equal to customer ids 2,3,4,.... Regarding customer requests its i+2
-                    if try_tour:
-                        print(try_tour)
-                        self.tour = []
-                        for t in try_tour:
-                            self.tour.append(tour_dict[t])
-                    print('Tour:')
-                    print(self.tour)
+                    
+                    #print(try_tour)
+                    self.tour = []
+                    for t in try_tour:
+                        self.tour.append(tour_dict[t])
+                    #print('Tour:')
+                    #print(self.tour)
                     #accecpt/reject: set customers to 2 or 3 depending on whether they are included in the tour or not. Keep if 0 or 3
                     new_requestStates = []
                     for i in range(len(node.getRequests())):
@@ -269,7 +275,7 @@ class StateSpaceCreator:
                 new_states.append((Node(node.getDestination(), r, new_delta, node.getTimeLeft()-1, not(node.getPredecision()), self.getID(node.getTimeLeft())), self.getCustomerBehavior(node.getTimeLeft()-1,r)))
             return new_states
 
-#Helpers
+##Helpers##
 def getManhattan(coordinates):
     distances = []
     for c1 in coordinates:
@@ -285,7 +291,7 @@ def getTourDistance(tour, distances):
         dist = dist + distances[tour[t]][tour[t+1]]
     return(dist)
 
-##experiment1
+"""##experiment1
 start = [(1,1)] #dest 0
 end = [(2,1)] #dest 1
 customer_coordinates = [(3,1),(4,1)] #dest2,...
@@ -300,13 +306,12 @@ def getCustomerBehavior(time_left, customers):
             k = (customers[c] * customer_likelihood[c] + abs(customers[c]-1) * (1-customer_likelihood[c]))
             total = total * k
     if total == 0:
-        return 1
+        return 1.0
     else:
         return total
     
-Node1 = Node(0, [0,0], 0, 6, True)
-stateSpaceCreator = StateSpaceCreator(Node1, start, end, customer_coordinates, getCustomerBehavior)
-stateSpaceCreator.createStateSpace()
+Node1 = Node(0, [0,0], 0, 6, True)"""
+
 
 """##experiment2
 start = [(1,1)] #dest 0
@@ -316,4 +321,21 @@ def getCustomerBehavior(time_left, customers):
     return 0.4
 Node1 = Node(0, [0], 0, 3, True)
 stateSpaceCreator = StateSpaceCreator(Node1, start, end, customer_coordinates, getCustomerBehavior)
-stateSpaceCreator.createStateSpace()"""
+stateSpaceCreator.createPolicy()"""
+
+"""##experiment3
+start = [(1,1)] #dest 0
+end = [(2,1)] #dest 1
+customer_coordinates = [(3,1),(4,1),(3,3),(3,2)] #dest2,...
+
+def getCustomerBehavior(time_left, customers):
+    return 0.4
+
+Node1 = Node(0, [0,0,0,0], 0, 8, True)
+
+stateSpaceCreator = StateSpaceCreator(Node1, start, end, customer_coordinates, getCustomerBehavior)
+policy = stateSpaceCreator.createPolicy()
+print("State space size:" + str(len(policy)))
+#createGraphWithStates(policy)
+#stateSpaceCreator.printStateSpace(policy)
+#print(policy)"""
