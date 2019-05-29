@@ -1244,3 +1244,224 @@ Academic license - for non-commercial use only
 Gurobi 8.1.1 (mac64, Python) logging started Sun May 19 12:28:13 2019
 
 Academic license - for non-commercial use only
+
+Gurobi 8.1.1 (mac64, Python) logging started Wed May 29 11:12:46 2019
+
+Academic license - for non-commercial use only
+Changed value of parameter lazyConstraints to 1
+   Prev: 0  Min: 0  Max: 1  Default: 0
+Optimize a model with 3 rows, 1 columns and 3 nonzeros
+Variable types: 0 continuous, 1 integer (1 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+00]
+  Objective range  [2e+00, 2e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 3e+00]
+Found heuristic solution: objective 1.5000000
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 8 available processors)
+
+Solution count 1: 1.5 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.500000000000e+00, best bound 1.500000000000e+00, gap 0.0000%
+
+Gurobi 8.1.1 (mac64, Python) logging started Wed May 29 11:13:58 2019
+
+Academic license - for non-commercial use only
+Changed value of parameter lazyConstraints to 1
+   Prev: 0  Min: 0  Max: 1  Default: 0
+Optimize a model with 3 rows, 1 columns and 3 nonzeros
+Variable types: 0 continuous, 1 integer (1 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+00]
+  Objective range  [2e+00, 2e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 3e+00]
+Found heuristic solution: objective 1.5000000
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 8 available processors)
+
+Solution count 1: 1.5 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.500000000000e+00, best bound 1.500000000000e+00, gap 0.0000%
+Changed value of parameter lazyConstraints to 1
+   Prev: 0  Min: 0  Max: 1  Default: 0
+Optimize a model with 3 rows, 3 columns and 7 nonzeros
+Model has 1 quadratic constraint
+Variable types: 0 continuous, 3 integer (3 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+00]
+  QMatrix range    [1e+00, 2e+00]
+  QLMatrix range   [2e+00, 2e+00]
+  Objective range  [1e+00, 2e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+00]
+Presolve removed 3 rows and 2 columns
+Presolve time: 0.00s
+Presolved: 0 rows, 1 columns, 0 nonzeros
+Variable types: 0 continuous, 1 integer (1 binary)
+Found heuristic solution: objective 2.6666667
+
+Explored 0 nodes (0 simplex iterations) in 0.01 seconds
+Thread count was 8 (of 8 available processors)
+
+Solution count 1: 2.66667 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 2.666666666667e+00, best bound 2.666666666667e+00, gap 0.0000%
+Changed value of parameter lazyConstraints to 1
+   Prev: 0  Min: 0  Max: 1  Default: 0
+Optimize a model with 3 rows, 3 columns and 6 nonzeros
+Model has 1 quadratic constraint
+Variable types: 0 continuous, 3 integer (3 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  QMatrix range    [1e+00, 2e+00]
+  QLMatrix range   [2e+00, 2e+00]
+  Objective range  [1e+00, 2e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 1e+00]
+Presolve removed 3 rows and 1 columns
+Presolve time: 0.00s
+Presolved: 0 rows, 2 columns, 0 nonzeros
+Variable types: 0 continuous, 2 integer (2 binary)
+
+Root relaxation: objective 1.000000e+00, 0 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0       1.0000000    1.00000  0.00%     -    0s
+
+Explored 0 nodes (0 simplex iterations) in 0.01 seconds
+Thread count was 8 (of 8 available processors)
+
+Solution count 1: 1 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.000000000000e+00, best bound 1.000000000000e+00, gap 0.0000%
+
+Gurobi 8.1.1 (mac64, Python) logging started Wed May 29 15:13:18 2019
+
+Academic license - for non-commercial use only
+Changed value of parameter lazyConstraints to 1
+   Prev: 0  Min: 0  Max: 1  Default: 0
+Optimize a model with 3 rows, 1 columns and 3 nonzeros
+Variable types: 0 continuous, 1 integer (1 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  Objective range  [1e+00, 1e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 6e+00]
+Found heuristic solution: objective 1.1428571
+
+Explored 0 nodes (0 simplex iterations) in 0.01 seconds
+Thread count was 1 (of 8 available processors)
+
+Solution count 1: 1.14286 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.142857142857e+00, best bound 1.142857142857e+00, gap 0.0000%
+Changed value of parameter lazyConstraints to 1
+   Prev: 0  Min: 0  Max: 1  Default: 0
+Optimize a model with 3 rows, 3 columns and 7 nonzeros
+Model has 1 quadratic constraint
+Variable types: 0 continuous, 3 integer (3 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 3e+00]
+  QMatrix range    [1e+00, 2e+00]
+  QLMatrix range   [2e+00, 2e+00]
+  Objective range  [1e+00, 2e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 5e+00]
+Presolve removed 3 rows and 2 columns
+Presolve time: 0.01s
+Presolved: 0 rows, 1 columns, 0 nonzeros
+Variable types: 0 continuous, 1 integer (1 binary)
+Found heuristic solution: objective 2.8333333
+
+Explored 0 nodes (0 simplex iterations) in 0.02 seconds
+Thread count was 8 (of 8 available processors)
+
+Solution count 1: 2.83333 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 2.833333333333e+00, best bound 2.833333333333e+00, gap 0.0000%
+Changed value of parameter lazyConstraints to 1
+   Prev: 0  Min: 0  Max: 1  Default: 0
+Optimize a model with 3 rows, 3 columns and 7 nonzeros
+Model has 1 quadratic constraint
+Variable types: 0 continuous, 3 integer (3 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+00]
+  QMatrix range    [1e+00, 2e+00]
+  QLMatrix range   [2e+00, 2e+00]
+  Objective range  [1e+00, 1e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 5e+00]
+Presolve removed 3 rows and 2 columns
+Presolve time: 0.00s
+Presolved: 0 rows, 1 columns, 0 nonzeros
+Variable types: 0 continuous, 1 integer (1 binary)
+Found heuristic solution: objective 2.5000000
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 8 (of 8 available processors)
+
+Solution count 1: 2.5 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 2.500000000000e+00, best bound 2.500000000000e+00, gap 0.0000%
+Changed value of parameter lazyConstraints to 1
+   Prev: 0  Min: 0  Max: 1  Default: 0
+Optimize a model with 3 rows, 1 columns and 3 nonzeros
+Variable types: 0 continuous, 1 integer (1 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  Objective range  [1e+00, 1e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 5e+00]
+Found heuristic solution: objective 1.1666667
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 8 available processors)
+
+Solution count 1: 1.16667 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.166666666667e+00, best bound 1.166666666667e+00, gap 0.0000%
+Changed value of parameter lazyConstraints to 1
+   Prev: 0  Min: 0  Max: 1  Default: 0
+Optimize a model with 3 rows, 6 columns and 12 nonzeros
+Model has 2 quadratic constraints
+Variable types: 0 continuous, 6 integer (6 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 3e+00]
+  QMatrix range    [1e+00, 2e+00]
+  QLMatrix range   [2e+00, 2e+00]
+  Objective range  [1e+00, 2e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 5e+00]
+Presolve time: 0.00s
+Presolved: 23 rows, 12 columns, 63 nonzeros
+Variable types: 0 continuous, 12 integer (12 binary)
+Found heuristic solution: objective 2.8333333
+
+Root relaxation: objective 3.833333e+00, 9 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0       3.8333333    3.83333  0.00%     -    0s
+
+Explored 0 nodes (9 simplex iterations) in 0.01 seconds
+Thread count was 8 (of 8 available processors)
+
+Solution count 2: 3.83333 2.83333 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 3.833333333333e+00, best bound 3.833333333333e+00, gap 0.0000%

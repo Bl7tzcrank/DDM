@@ -167,12 +167,11 @@ class StateSpaceCreator:
         new_states = []
         ##in case of S0->S0x, covers the decision's influence on request states
         if(node.getPredecision()):
+            #only if a predecessor state is allowed in terms of time
             if((node.getTimeLeft()) > 0):
                 #counts the confirmed customer requests
                 profit = 0
-                new_requestStates = []
-                #calculate Route 
-                if(True): #in case there has never been a route calculated, in case there are new requests (=1). Include =2. Transmit old route from parent for the case that it does not need to be recalculated?
+                if((node.getDelta() == 0) or (1 in node.getRequests())): #in case there are new requests (=1) or the destination was reached. In this case a tour must be calculated.
                     #Create a customer dictionary to assign customer ids to tour input. The tour input is start+end+active+new customers. The customers are numbered 2,3,...
                     #For a customer request status of [0,1], the dict would be [0,1,3] while the tour might return a [0,2,1] where customer 3 is on the second step of the route, but indicated by a 2.
                     #The dictionary can now identify, that the 2 is customer 3 by doing tour_dict[2] = 3
@@ -185,9 +184,9 @@ class StateSpaceCreator:
                     for i in range(len(node.getRequests())):
                         if node.getRequests()[i] == 1:
                             tour_dict.append(i+2)
-                    print('#TSPINPUT#')
-                    print(str([self.all_coordinates[node.getDestination()]]) + str(self.end) + str(self.getOldCustomer(node.getRequests())) + str(self.getNewCustomers(node.getRequests())) + str(node.getTimeLeft()-node.getDelta()))
-                    print(tour_dict)
+                    #print('#TSPINPUT#')
+                    #print(str([self.all_coordinates[node.getDestination()]]) + str(self.end) + str(self.getOldCustomer(node.getRequests())) + str(self.getNewCustomers(node.getRequests())) + str(node.getTimeLeft()-node.getDelta()))
+                    #print(tour_dict)
                     tsp = tsp_solver([self.all_coordinates[node.getDestination()]],self.end,self.getOldCustomer(node.getRequests()),self.getNewCustomers(node.getRequests()),node.getTimeLeft()-node.getDelta())
                     try_tour = tsp.solveTSP()
                     #convert tsp_solver output. Ids in self.tour are then equal to customer ids 2,3,4,.... Regarding customer requests its i+2
@@ -198,42 +197,46 @@ class StateSpaceCreator:
                             self.tour.append(tour_dict[t])
                     print('Tour:')
                     print(self.tour)
-                #accecpt/reject: set customers to 2 or 3 depending on whether they are included in the tour or not. Keep if 0 or 3
-                for i in range(len(node.getRequests())):
-                    if (i+2 in self.tour) and (node.getRequests()[i] == 1):
-                        new_requestStates.append(2)
-                        profit = profit + 1
-                    elif (i+2 not in self.tour) and (node.getRequests()[i] == 1):                       
-                        new_requestStates.append(3)
-                    else:
-                        new_requestStates.append(node.getRequests()[i])
-                #check if arrived 
-                if node.getDelta() == 0:
-                    tour_length = getTourDistance(self.tour, self.distances)
-                    wait_possible = node.getTimeLeft()-tour_length > 0
-                    #check if open customer requests
-                    if 2 in new_requestStates:
-                        #wait possible: wait for 1. Case distinction here: Two child nodes added if waiting possible
-                        if wait_possible:
-                            new_states.append((Node(node.getDestination(), new_requestStates, node.getDelta(), node.getTimeLeft(), not(node.getPredecision()), self.getID(node.getTimeLeft())), profit))
-                        #Set next destination. Set to 3 for next customer
-                        changed_new_requestStates = [] #necessary!
-                        for i in range(len(new_requestStates)):
-                            if (i+2 == self.tour[1]):
-                                changed_new_requestStates.append(3)
-                            else:
-                                changed_new_requestStates.append(new_requestStates[i])
-                        new_states.append((Node(self.tour[1], changed_new_requestStates, self.distances[node.getDestination()][self.tour[1]], node.getTimeLeft(), not(node.getPredecision()), self.getID(node.getTimeLeft())), profit))
-                    #check if no open customer request --> wait only if enough time left to reach final destination
-                    else: 
-                        #wait possible: wait for 1
-                        if wait_possible:
-                            new_states.append((Node(node.getDestination(), new_requestStates, node.getDelta(), node.getTimeLeft(), not(node.getPredecision()), self.getID(node.getTimeLeft())), profit))
+                    #accecpt/reject: set customers to 2 or 3 depending on whether they are included in the tour or not. Keep if 0 or 3
+                    new_requestStates = []
+                    for i in range(len(node.getRequests())):
+                        if (i+2 in self.tour) and (node.getRequests()[i] == 1):
+                            new_requestStates.append(2)
+                            profit = profit + 1
+                        elif (i+2 not in self.tour) and (node.getRequests()[i] == 1):                       
+                            new_requestStates.append(3)
                         else:
-                            new_states.append((Node(self.tour[1], new_requestStates, self.distances[node.getDestination()][self.tour[1]], node.getTimeLeft(), not(node.getPredecision()), self.getID(node.getTimeLeft())), profit))
-                #if not arrived at a destination              
-                else: #no tour recalculation necessary
-                    new_states.append((Node(node.getDestination(), new_requestStates, node.getDelta(), node.getTimeLeft(), not(node.getPredecision()), self.getID(node.getTimeLeft())), profit))
+                            new_requestStates.append(node.getRequests()[i])
+                    #if arrived and there were new requests
+                    if node.getDelta() == 0:
+                        tour_length = getTourDistance(self.tour, self.distances)
+                        wait_possible = node.getTimeLeft()-tour_length > 0
+                        
+                        #if open customer requests
+                        if 2 in new_requestStates:
+                            #wait possible: wait for 1. Case distinction here: Two child nodes added if waiting possible
+                            if wait_possible:
+                                new_states.append((Node(node.getDestination(), new_requestStates, node.getDelta(), node.getTimeLeft(), not(node.getPredecision()), self.getID(node.getTimeLeft())), profit))
+                            #Independent of if wait is possible: Set next destination. Set to 3 for next customer
+                            changed_new_requestStates = [] #necessary!
+                            for i in range(len(new_requestStates)):
+                                if (i+2 == self.tour[1]):
+                                    changed_new_requestStates.append(3)
+                                else:
+                                    changed_new_requestStates.append(new_requestStates[i])
+                            new_states.append((Node(self.tour[1], changed_new_requestStates, self.distances[node.getDestination()][self.tour[1]], node.getTimeLeft(), not(node.getPredecision()), self.getID(node.getTimeLeft())), profit))
+                        #check if no open customer request --> wait only if enough time left to reach final destination
+                        else: 
+                            #wait possible: wait for 1
+                            if wait_possible:
+                                new_states.append((Node(node.getDestination(), new_requestStates, node.getDelta(), node.getTimeLeft(), not(node.getPredecision()), self.getID(node.getTimeLeft())), profit))
+                            else: #go to final destination
+                                new_states.append((Node(self.tour[1], new_requestStates, self.distances[node.getDestination()][self.tour[1]], node.getTimeLeft(), not(node.getPredecision()), self.getID(node.getTimeLeft())), profit))
+                    #if not arrived at a destination but there were new requests            
+                    else:
+                        new_states.append((Node(node.getDestination(), new_requestStates, node.getDelta(), node.getTimeLeft(), not(node.getPredecision()), self.getID(node.getTimeLeft())), profit))
+                else: #no tour recalculation necessary if not arrived and no new requests
+                    new_states.append((Node(node.getDestination(), node.getRequests(), node.getDelta(), node.getTimeLeft(), not(node.getPredecision()), self.getID(node.getTimeLeft())), profit))
                 return (new_states)
             else: 
                 return([])    
@@ -296,14 +299,17 @@ def getCustomerBehavior(time_left, customers):
         elif customers[c] < 2: 
             k = (customers[c] * customer_likelihood[c] + abs(customers[c]-1) * (1-customer_likelihood[c]))
             total = total * k
-    return total
+    if total == 0:
+        return 1
+    else:
+        return total
     
 Node1 = Node(0, [0,0], 0, 6, True)
 stateSpaceCreator = StateSpaceCreator(Node1, start, end, customer_coordinates, getCustomerBehavior)
 stateSpaceCreator.createStateSpace()
 
-##experiment2
-"""start = [(1,1)] #dest 0
+"""##experiment2
+start = [(1,1)] #dest 0
 end = [(3,1)] #dest 1
 customer_coordinates = [(2,1)] #dest2,...
 def getCustomerBehavior(time_left, customers):
