@@ -67,7 +67,7 @@ class Graph:
         return node.getID()
 
 class StateSpaceCreator:
-    def __init__(self, init, start, end, customer_coordinates, getCustomerBehavior, tour=None):
+    def __init__(self, init, start, end, customer_coordinates, getCustomerBehavior, waiting_allowed, tour=None):
         self.init = init
         self.start = start
         self.end = end
@@ -77,6 +77,7 @@ class StateSpaceCreator:
         self.tour = tour if tour is not None else []
         self.id_counter = 0
         self.getCustomerBehavior = getCustomerBehavior
+        self.waiting_allowed = waiting_allowed
 
     def getInit(self):
         return self.init
@@ -221,7 +222,7 @@ class StateSpaceCreator:
                         #if open customer requests
                         if 2 in new_requestStates:
                             #wait possible: wait for 1. Case distinction here: Two child nodes added if waiting possible
-                            if wait_possible:
+                            if wait_possible and self.waiting_allowed:
                                 new_states.append((Node(node.getDestination(), new_requestStates, node.getDelta(), node.getTimeLeft(), not(node.getPredecision()), self.getID(node.getTimeLeft())), profit))
                             #Independent of if wait is possible: Set next destination. Set to 3 for next customer
                             changed_new_requestStates = [] #necessary!

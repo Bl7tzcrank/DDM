@@ -163,26 +163,4 @@ def elements(tuplelist):
             k.append(j)
     return k
 
-"""start = [(1,1)]
-end = [(2,1)]
-active = [(3,3)]
-new = [(3,1),(3,2)]
-t = 8
-tsp = tsp_solver(start,end,active,new,t)
-print(tsp.solveTSP())"""
 
-"""start = [(1,1)]
-end = [(2,1)]
-active = []
-new = [(4,1),(3,3),(3,2)]
-t = 9
-tsp = tsp_solver(start,end,active,new,t)
-print(tsp.solveTSP())"""
-
-"""start = [(1,1)]
-end = [(2,1)]
-active = []
-new = []
-t = 9
-tsp = tsp_solver(start,end,active,new,t)
-tsp.solveTSP()"""
