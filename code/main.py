@@ -19,10 +19,10 @@ def getCustomerBehavior(time_left, customers):
     else:
         return total
     
-Node1 = Node(0, [0,0], 0, 6, True)
+Node1 = Node(0, [0,0], 0, 6, True) #first node/state
 
 
-"""##experiment2: base case
+"""##experiment2
 start = [(1,2)] #dest 0
 end = [(3,2)] #dest 1
 customer_coordinates = [(2,2)] #dest2,...
@@ -39,7 +39,7 @@ def getCustomerBehavior(time_left, customers):
         return 1.0
     else:
         return total
-Node1 = Node(0, [0], 0, 3, True)"""
+Node1 = Node(0, [0], 0, 3, True) #first node/state"""
 
 """##experiment3
 start = [(1,1)] #dest 0
@@ -60,9 +60,9 @@ def getCustomerBehavior(time_left, customers):
     else:
         return total
 
-Node1 = Node(0, [0,0,0,0], 0, 8, True)"""
+Node1 = Node(0, [0,0,0,0], 0, 8, True) #first node/state"""
 
-"""##experiment4:extended use case
+"""##experiment4
 start = [(1,2)] #dest 0
 end = [(4,2)] #dest 1
 customer_coordinates = [(3,1),(2,3),(3,3)] #dest2,...
@@ -81,9 +81,9 @@ def getCustomerBehavior(time_left, customers):
     else:
         return total
 
-Node1 = Node(0, [0,0,0], 0, 9, True)"""
+Node1 = Node(0, [0,0,0], 0, 9, True) #first node/state"""
 
-"""##experiment5: complexity
+"""##experiment5
 start = [(1,2)] #dest 0
 end = [(4,2)] #dest 1
 customer_coordinates = [(2,1),(2,3),(3,1),(3,3)] #dest2,...
@@ -102,7 +102,7 @@ def getCustomerBehavior(time_left, customers):
     else:
         return total
 
-Node1 = Node(0, [0,0,0,0], 0, 10, True)"""
+Node1 = Node(0, [0,0,0,0], 0, 10, True) #first node/state"""
 
 """#experiment 6
 start = [(1,2)] #dest 0
@@ -124,7 +124,7 @@ def getCustomerBehavior(time_left, customers):
     else:
         return total
 
-Node1 = Node(0, [0,0,0,0], 0, 14, True)"""
+Node1 = Node(0, [0,0,0,0], 0, 14, True) #first node/state"""
 
 stateSpaceCreator = StateSpaceCreator(Node1, start, end, customer_coordinates, getCustomerBehavior, False)
 policy = stateSpaceCreator.createPolicy()
