@@ -126,7 +126,7 @@ def getCustomerBehavior(time_left, customers):
 
 Node1 = Node(0, [0,0,0,0], 0, 14, True) #first node/state"""
 
-stateSpaceCreator = StateSpaceCreator(Node1, start, end, customer_coordinates, getCustomerBehavior, False)
+stateSpaceCreator = StateSpaceCreator(Node1, start, end, customer_coordinates, getCustomerBehavior, True)
 policy = stateSpaceCreator.createPolicy()
 print("State space size:" + str(len(policy)))
 print("EX:" + str(policy["root"]["obj"].getExpectedValue()))

@@ -71,7 +71,7 @@ class tsp_solver:
                 expr1 = expr1 + gurobipy.LinExpr(vars[i,j]*dist[i,j])
         m.addConstr(expr1 <= self.t)
         
-        #Objective: Max visited customers
+        #Objective: Max visited customers, Min tour length
         init2 = True
         for i,j in dist.keys():
             if(init2):
@@ -82,9 +82,6 @@ class tsp_solver:
         
         expr3 = expr2 + ((1/(self.t+1)) * expr1)
         m.setObjective(expr3, sense=gurobipy.GRB.MAXIMIZE)
-
-        #m.setObjective(expr2, sense=gurobipy.GRB.MAXIMIZE)
-        #m.setObjective(vars.sum(), sense=gurobipy.GRB.MAXIMIZE)
 
         m._vars = vars
         m.Params.lazyConstraints = 1
@@ -136,6 +133,7 @@ def subtour(edges):
                 cycle = thiscycle
     return cycle
 
+#extracts the tour
 def getTour(tupledict):
     visited = []
     current = 0

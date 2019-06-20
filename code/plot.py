@@ -10,7 +10,7 @@ def createGraph(dict):
     p=nx.drawing.nx_pydot.to_pydot(g)
     p.write_png('example.png')
 
-#prints a graph
+#prints a graph as .png
 def createGraphWithStates(dict):
     g = nx.DiGraph()
     for k in dict.keys():
@@ -21,7 +21,7 @@ def createGraphWithStates(dict):
     p=nx.drawing.nx_pydot.to_pydot(g)
     p.write_png('example.png')
 
-#prints a seperated graph (multiple files)
+#prints a seperated graph (multiple files) as .pngs
 def createSplitGraphWithStates(dict):
     splitters = dict[dict["root"]["successors"][0][0]]["successors"][:]
     nodes_persplitter = []
