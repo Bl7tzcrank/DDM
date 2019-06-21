@@ -1,14 +1,14 @@
 # DDM VRP with greedy confirmation and waiting
 
-This implementation finds an optimal decision policy for the vehicle routing problem with greedy confirmation and waiting.
+This implementation finds an optimal decision policy for the vehicle routing problem with greedy confirmations and waiting.
 
 ## Getting Started
 
-You need to install anaconda and create an environment (https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html). Next you should intall the following packages to your anaconda environment: itertools, gurobipy and networkx. You also need to bring in a gurobi license. Then move to the folder where your files are located and run  
+You need to install anaconda and create an environment (https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html). Next you should intall the following packages to your anaconda environment: itertools, gurobipy and networkx. You also need to bring in a gurobi license. Then move to the folder where your files are located and run:  
 ```
 source activate [environment name]
 ```
-Then you can run the main.py by typing
+Then you can run the main.py by typing:
 ```
 python main.py
 ```

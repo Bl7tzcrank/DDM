@@ -13,6 +13,7 @@ import random
 import itertools
 import gurobipy as gurobipy 
 
+#Used for solving the TSP
 class tsp_solver:
     def __init__(self, start, end, active, new, t):
         self.start = start
@@ -133,7 +134,7 @@ def subtour(edges):
                 cycle = thiscycle
     return cycle
 
-#extracts the tour
+#Extracts the tour
 def getTour(tupledict):
     visited = []
     current = 0

@@ -4,6 +4,7 @@ from plot import *
 import os
 
 ##Classes
+#A Node represents a state in the state space graph
 class Node:
     def __init__(self, destination, requests, delta, time_left, predecision, id=None):
         self.state = {
@@ -43,6 +44,7 @@ class Node:
     def getID(self):
         return self.id
 
+#Comprises the data structure in which the state space is stored
 class Graph:
     def __init__(self):
         self.graphdict = {}
@@ -66,6 +68,7 @@ class Graph:
             }   
         return node.getID()
 
+#Used to calculate the state space
 class StateSpaceCreator:
     def __init__(self, init, start, end, customer_coordinates, getCustomerBehavior, waiting_allowed, tour=None):
         self.init = init
@@ -88,6 +91,7 @@ class StateSpaceCreator:
     def getDistances(self):
         return self.distances
 
+    #returns a unique id for a node
     def getID(self, time_left):
         self.id_counter = self.id_counter + 1
         return (str(time_left) + str('.') + str(self.id_counter))
